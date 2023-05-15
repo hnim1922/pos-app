@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
-import { Button, Card, Checkbox, Col, Form, Input, InputNumber, Layout, Menu, Modal, Radio, Row, theme } from 'antd';
+import { Button, Card, Checkbox, Col, Form, Input, InputNumber, Layout, List, Menu, Modal, Radio, RadioChangeEvent, Row, Select, theme } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
 
 function App() {
@@ -14,9 +13,27 @@ function App() {
   const handleCancel = () => {
     setOpen(false);
   };
+  const [typeValue, setTypeValue] = useState('');
+
+  const handleTypeChange = (e: RadioChangeEvent) => {
+    setTypeValue(e.target.value);
+  }
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm()
-
+  const coffeeList = [
+    { id: 1, name: ' Milk Coffee' },
+    { id: 2, name: ' Milk Coffee' },
+    { id: 3, name: ' Milk Coffee' },
+  ];
+  const renderCoffeeItem = (item: { id: number, name: string }) => (
+    <div>
+      <h3>{item.name}:</h3>
+      <p>Size: L</p>
+      <p>Type: Cold</p>
+      <p>Whipped Cream: Yes</p>
+      <p>Milk: Whole Milk</p>
+    </div>
+  );
   return (
     <>
       <Layout style={{ minHeight: '90vh' }}>
@@ -59,110 +76,50 @@ function App() {
         </Sider>
         <Layout>
           <Header style={{ background: colorBgContainer, textAlign: "center", paddingBottom: "6%" }}> <h1 style={{ fontSize: "150%", }}>Coffee Shop Name</h1></Header>
-          <Content style={{ margin: '24px 16px 0' }}>
-            <Row gutter={16}>
-              <Col span={8}>
-                <Card
-                  title="Mocha"
-                  style={{ width: 300 }}
-                  cover={
-                    <img
-                      alt="coffee"
-                      src="https://example.com/coffee.jpg"
-                    />
-                  }
-                >
-                  <Button type="primary" onClick={handleClick}>
-                    Add to Order
-                  </Button>
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card
-                  title="Cafe Sữa Đá"
-                  style={{ width: 300 }}
-                  cover={
-                    <img
-                      alt="coffee"
-                      src="https://example.com/coffee.jpg"
-                    />
-                  }
-                >
-                  <Button type="primary" onClick={handleClick}>
-                    Add to Order
-                  </Button>
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card
-                  title="Cafe Đen"
-                  style={{ width: 300 }}
-                  cover={
-                    <img
-                      alt="coffee"
-                      src="https://example.com/coffee.jpg"
-                    />
-                  }
-                >
-                  <Button type="primary" onClick={handleClick}>
-                    Add to Order
-                  </Button>
-                </Card>
-              </Col>
-            </Row>
-            <Row gutter={16} style={{ paddingTop: "5%" }}>
-              <Col span={8}>
-                <Card
-                  title="Mocha"
-                  style={{ width: 300 }}
-                  cover={
-                    <img
-                      alt="coffee"
-                      src="https://example.com/coffee.jpg"
-                    />
-                  }
-                >
-                  <Button type="primary" onClick={handleClick}>
-                    Add to Order
-                  </Button>
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card
-                  title="Cafe Sữa Đá"
-                  style={{ width: 300 }}
-                  cover={
-                    <img
-                      alt="coffee"
-                      src="https://example.com/coffee.jpg"
-                    />
-                  }
-                >
-                  <Button type="primary" onClick={handleClick}>
-                    Add to Order
-                  </Button>
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card
-                  title="Cafe Đen"
-                  style={{ width: 300 }}
-                  cover={
-                    <img
-                      alt="coffee"
-                      src="https://example.com/coffee.jpg"
-                    />
-                  }
-                >
-                  <Button type="primary" onClick={handleClick}>
-                    Add to Order
-                  </Button>
-                </Card>
-              </Col>
-            </Row>
+          <Content style={{ margin: '24px 16px 0', display: "flex" }}>
+            <Content style={{ flex: 0.7, marginRight: '10px' }}>
+              <Row gutter={[16, 16]}>
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <Col key={index} span={8}>
+                    <Card
+                      className="coffeeCard"
+                      title=" Milk Coffee/Cafe Sữa "
+                      cover={
+                        <img
+                          className="coffeeImg"
+                          alt="coffee"
+                          src="https://product.hstatic.net/1000287491/product/4._ca_phe_sua_da.jpg"
+                        />
+                      }
+                    >
+                      <Button className="addBtn" type="primary" onClick={handleClick}>
+                        Add to Order
+                      </Button>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </Content>
+            <Content className='order'>
+              <h1 >Order</h1>
+              <div className='coffeeList'>
+                <List
+                  dataSource={coffeeList}
+                  renderItem={(item) => renderCoffeeItem(item)}
+                  pagination={false}
+                />
+                <h2>Total Price: 20$</h2>
+              </div>
+
+              <Button className='payBtn' type="primary">
+                Pay/ Thanh Toán
+              </Button>
+            </Content>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+
+          <Footer style={{ textAlign: 'center' }}></Footer>
         </Layout>
+
       </Layout>
       <Modal
         title="Customize coffee"
@@ -179,7 +136,7 @@ function App() {
       >
         <div style={{ display: 'flex', height: '100%', marginTop: '5%' }}>
           <Form form={form}
-            id="planForm"
+            id="coffeeForm"
             labelCol={{ span: 13 }}
             wrapperCol={{ span: 11 }}
             initialValues={{ remember: true }}
@@ -187,14 +144,20 @@ function App() {
             labelAlign="left"
           >
             <Form.Item
-              label="Type"
+              label="Amount/Số Lượng"
+              name="amount"
+            >
+              <InputNumber min={1} defaultValue={1} />
+            </Form.Item>
+            <Form.Item
+              label="Type/Loại"
               name="type"
               rules={[{ required: true, message: 'Please input plan name !' }]}
             >
-              <Radio.Group>
-                <Radio value="Hot"> Hot </Radio>
-                <Radio value="Cold"> Cold </Radio>
-                <Radio value="Blended"> Blended </Radio>
+              <Radio.Group onChange={handleTypeChange}>
+                <Radio value="Hot/"> Hot/Nóng </Radio>
+                <Radio value="Cold"> Cold/Lạnh </Radio>
+                <Radio value="Blended"> Blended/Đá Xay </Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -202,11 +165,15 @@ function App() {
               name="size"
               rules={[{ required: true, message: 'Please input plan name !' }]}
             >
-              <Radio.Group>
-                <Radio value="S"> S </Radio>
-                <Radio value="M"> M </Radio>
-                <Radio value="L"> L </Radio>
-                <Radio value="XL"> XL </Radio>
+              <Radio.Group value={typeValue === 'Hot' ? 'S' : undefined}>
+                <Radio value="S">S</Radio>
+                <Radio value="M">M</Radio>
+                <Radio value="L" disabled={typeValue === 'Hot'}>
+                  L
+                </Radio>
+                <Radio value="XL" disabled={typeValue === 'Hot'}>
+                  XL
+                </Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -234,16 +201,9 @@ function App() {
 
             <Form.Item
               label="Chocolate Sauce"
-              name="choco"
-              rules={[{ required: true, message: 'Please input plan name !' }]}
+              name="Chocolate"
             >
-              <InputNumber />
-            </Form.Item>
-
-            <Form.Item
-              label="Price"
-              name="price">
-              $14
+              <InputNumber min={0} max={6} />
             </Form.Item>
           </Form >
         </div >
