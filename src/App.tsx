@@ -155,7 +155,7 @@ function App() {
               rules={[{ required: true, message: 'Please input plan name !' }]}
             >
               <Radio.Group onChange={handleTypeChange}>
-                <Radio value="Hot/"> Hot/Nóng </Radio>
+                <Radio value="Hot"> Hot/Nóng </Radio>
                 <Radio value="Cold"> Cold/Lạnh </Radio>
                 <Radio value="Blended"> Blended/Đá Xay </Radio>
               </Radio.Group>
@@ -203,7 +203,7 @@ function App() {
               label="Chocolate Sauce"
               name="Chocolate"
             >
-              <InputNumber min={0} max={6} />
+              <InputNumber min={0} max={6} disabled={(typeValue == "Cold") || (typeValue == "Blended")} />
             </Form.Item>
           </Form >
         </div >
